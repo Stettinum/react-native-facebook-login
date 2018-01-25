@@ -46,6 +46,33 @@ class FBLogin extends Component {
     }
   }
 
+  static childContextTypes = {
+    isLoggedIn: PropTypes.bool,
+    login: PropTypes.func,
+    logout: PropTypes.func,
+    props: PropTypes.shape({})
+  }
+
+  getChildContext () {
+     return {
+       isLoggedIn: this.state.isLoggedIn,
+       login: this.login,
+       logout: this.logout,
+       props: this.props
+     };
+   }
+
+   login(permissions) {
+     FBLoginManager.loginWithPermissions(
+       permissions || this.props.permissions,
+       (err,data) => this._handleEvent(err,data)
+     );
+   }
+
+   logout() {
+     FBLoginManager.logout((err, data) => this._handleEvent(err, data));
+   }
+
   componentWillMount(){
     const subscriptions = this.state.subscriptions;
 
@@ -85,7 +112,7 @@ class FBLogin extends Component {
   }
 
   render() {
-    return <RCTMFBLogin {...this.props} style={[styles.base, this.props.style]} />
+    return this.props.buttonView ? this.props.buttonView : <RCTMFBLogin {...this.props} style={[styles.base, this.props.style]} />
   }
 }
 
@@ -100,6 +127,7 @@ FBLogin.propTypes = {
   onError: PropTypes.func,
   onCancel: PropTypes.func,
   onPermissionsMissing: PropTypes.func,
+  buttonView: PropTypes.node
 };
 
 module.exports = {
