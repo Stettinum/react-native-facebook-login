@@ -65,12 +65,12 @@ class FBLogin extends Component {
    login(permissions) {
      FBLoginManager.loginWithPermissions(
        permissions || this.props.permissions,
-       (err,data) => this._handleEvent(err,data)
+       (err,data) => {}
      );
    }
 
    logout() {
-     FBLoginManager.logout((err, data) => this._handleEvent(err, data));
+     FBLoginManager.logout((err, data) => {});
    }
 
   componentWillMount(){
